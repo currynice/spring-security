@@ -1,0 +1,22 @@
+◎ HTTP BASIC authentication headers：一个基于IETF RFC的标准。
+  [ 绝大部分Web应用都不会选择HTTP基本认证这种认证方式，除安全性差、无法携带
+   cookie等因素外，灵活性不足也是它的一个主要缺点。通常大家更愿意选择表单认证，自己实现表单
+   登录页和验证逻辑，从而提高安全性 ]
+
+
+◎ HTTP Digest authentication headers：一个基于IETF RFC的标准。
+◎ HTTP X.509 client certificate exchange：一个基于IETF RFC的标准。
+◎ LDAP：一种常见的跨平台身份验证方式。
+◎ Form-based authentication：用于简单的用户界面需求。
+◎ OpenID authentication：一种去中心化的身份认证方式。
+◎ Authentication based on pre-established request headers：类似于 Computer Associates SiteMinder，
+一种用户身份验证及授权的集中式安全基础方案。
+◎ JasigCentral Authentication Service：单点登录方案。
+◎ Transparent authentication context propagation for Remote Method Invocation（RMI）and
+HttpInvoker：一个Spring远程调用协议
+◎ Automatic "remember-me" authentication：允许在指定到期时间前自行重新登录系统。
+◎ Anonymous authentication：允许匿名用户使用特定的身份安全访问资源。
+◎ Run-as authentication：允许在一个会话中变换用户身份的机制。
+◎ Java Authentication and Authorization Service:JAAS,Java验证和授权API。
+◎ Java EE container authentication：允许系统继续使用容器管理这种身份验证方式。
+◎ Kerberos：一种使用对称密钥机制，允许客户端与服务器相互确认身份的认证协议
