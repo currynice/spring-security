@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class HttpBasicAuthApplication {
 
     @GetMapping("hello")
-    public String hello(){
+    public String hello() {
         return "经过Basic认证才可以看见的内容";
     }
 

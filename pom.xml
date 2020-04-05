@@ -11,6 +11,7 @@
     <modules>
     <module>http-basic-auth</module>
      <module>form-auth</module>
+     <module>default-db-auth</module>
     </modules>
 
     <properties>
