@@ -54,7 +54,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     /**
-     * 认证信息管理
+     * 基于内存的多用户支持 认证信息管理
      * spring5中摒弃了原有的密码存储格式，官方把spring security的密码存储格式改了
      *
      * @param auth
