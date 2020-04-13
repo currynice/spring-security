@@ -44,7 +44,7 @@ public class UserDTO implements UserDetails {
 
 
     //method from UserDetail
-    //authorities 对应的是 role
+    //authorities < role
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
