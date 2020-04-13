@@ -1,0 +1,8 @@
+spring:
+    datasource:
+      driver-class-name:
+      url: jdbc:mysql://127.0.0.1:3306/security0?serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8&useSSL=true
+      username: root
+      password: root
+
+
