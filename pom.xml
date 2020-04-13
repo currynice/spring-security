@@ -12,6 +12,7 @@
     <module>http-basic-auth</module>
      <module>form-auth</module>
      <module>default-db-auth</module>
+     <module>custom-db-auth</module>
     </modules>
 
     <properties>
@@ -48,6 +49,12 @@
 <!--            <optional>true</optional>-->
 <!--        </dependency>-->
 
+        <!--工具包-->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>${hutool.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>mysql</groupId>
