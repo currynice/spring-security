@@ -1,16 +1,19 @@
 package com.cxy.security.customdbauth.config;
 
 
+
+//import com.cxy.security.customdbauth.filter.VerificationCodeFilter;
+import com.cxy.security.customdbauth.authProvider.MyDaoAuthenticationProvider;
+import com.cxy.security.customdbauth.authProvider.customAuthenticationDetailsSource.MyWebAuthenticationDetailsSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.authentication.configurers.provisioning.JdbcUserDetailsManagerConfigurer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+
 
 import javax.sql.DataSource;
 
@@ -21,6 +24,21 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private DataSource dataSource;
+
+    @Autowired
+    @Qualifier("authSuccessHandler")
+    private AuthenticationSuccessHandler authSuccessHandler;
+
+    @Autowired
+    @Qualifier("authFailureHandler")
+    private AuthenticationFailureHandler authFailureHandler;
+
+
+    @Autowired
+    private MyWebAuthenticationDetailsSource myWebAuthenticationDetailsSource;
+
+
+
 
     /**
      * 根据权限管理模式配置不同的expressions
@@ -40,13 +58,28 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 // 必须角色为ADMIN才可以访问
                 .antMatchers("/admin/api/**").hasRole("ADMIN") // "hasRole('ROLE_" + role + "')",hasRole('ROLE_" + role + "')"
                 //公开权限
-                .antMatchers("/app/api/**").permitAll()
+                .antMatchers("/app/api/**","/captcha.jpg").permitAll()
                 // 必须角色为USER才可以访问
                 .antMatchers("/user/api/**").hasRole("USER")
+
                 .anyRequest().authenticated()
                 .and()
-                .formLogin();
+                .formLogin()
+                //配置自己的登录页
+                // .loginPage("myLogin.html")
+                //自定义URL method:POST http://localhost:8080/myLogin?username=user&password=f54ed9e5-880f-4d4d-a3c4-7c39f81da5e7
+                .authenticationDetailsSource(myWebAuthenticationDetailsSource)
+                .loginProcessingUrl("/myLogin")
+                .successHandler(authSuccessHandler)
+                .failureHandler(authFailureHandler)
+                //登录页不设限
+                .permitAll()
+                .and()
+                .csrf().disable();
+        //在密码验证过程前添加自定义验证码拦截器
+//        http.addFilterBefore(new VerificationCodeFilter(), UsernamePasswordAuthenticationFilter.class);
     }
+
 
 
 
