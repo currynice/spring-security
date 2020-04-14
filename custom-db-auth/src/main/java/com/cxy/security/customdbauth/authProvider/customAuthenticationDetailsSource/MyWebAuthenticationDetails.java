@@ -32,6 +32,7 @@ public class MyWebAuthenticationDetails extends WebAuthenticationDetails  implem
     }
 
     /**
+     * http://localhost:8080/myLogin?username=root&password=123&captcha=f3wme 这么测（加上sessionId）
      */
     public MyWebAuthenticationDetails(HttpServletRequest request) {
         super(request);
@@ -40,7 +41,7 @@ public class MyWebAuthenticationDetails extends WebAuthenticationDetails  implem
         if(!StrUtil.isBlank(savedCode)){
             //清除旧的
             request.getSession().removeAttribute("captcha");
-            if(StrUtil.isBlank(imageCode)||!savedCode.equals(imageCode)){
+            if(!StrUtil.isBlank(imageCode)&&savedCode.equals(imageCode)){
                 imageCodePass = true;
             }
         }

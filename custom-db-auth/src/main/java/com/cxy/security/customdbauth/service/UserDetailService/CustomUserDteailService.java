@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
  * @description CustomUserDteail 动态加载
  * @date 2019年06月05日10:13
  **/
-@Component
+@Component("customUserDteailService")
 @Slf4j(topic = "Logger")
 public class CustomUserDteailService implements UserDetailsService {
     @Autowired
