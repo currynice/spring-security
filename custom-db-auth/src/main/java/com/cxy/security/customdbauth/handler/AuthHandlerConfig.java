@@ -3,9 +3,11 @@ package com.cxy.security.customdbauth.handler;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -63,6 +65,30 @@ public class AuthHandlerConfig {
                 out.flush();
                 out.close();
                 e.printStackTrace();
+            }
+        };
+    }
+
+
+
+    //登录鉴权失败逻辑
+    @Bean("authFailureHandler")
+    public LogoutSuccessHandler logoutSuccessHandler(){
+        return new LogoutSuccessHandler() {
+            @Override
+            public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+                //登录信息，不包含密码
+                response.setContentType ("application/json;charset=utf-8");
+                PrintWriter out = response.getWriter();
+                response.setStatus(200);//注销响应成功
+                Map<String, Object> map= new HashMap<>() ;
+                map.put ("status", 200);
+                map.put("msg","已注销");
+                ObjectMapper om = new ObjectMapper();
+                //map->json对象
+                out.write(om.writeValueAsString(map));
+                out.flush();
+                out.close();
             }
         };
     }

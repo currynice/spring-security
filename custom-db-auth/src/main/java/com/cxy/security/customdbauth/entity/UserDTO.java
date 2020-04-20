@@ -97,4 +97,6 @@ public class UserDTO implements UserDetails {
     public boolean isEnabled() {
         return enabled;
     }
+
+    //todo 重写equals() 和hashcode()方法  参考 org.springframework.security.core.userdetails.User
 }

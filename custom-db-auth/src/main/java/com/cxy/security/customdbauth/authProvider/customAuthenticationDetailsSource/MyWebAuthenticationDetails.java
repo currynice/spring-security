@@ -2,7 +2,7 @@ package com.cxy.security.customdbauth.authProvider.customAuthenticationDetailsSo
 
 import cn.hutool.core.util.StrUtil;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
-import org.springframework.stereotype.Component;
+
 
 
 import javax.servlet.http.HttpServletRequest;

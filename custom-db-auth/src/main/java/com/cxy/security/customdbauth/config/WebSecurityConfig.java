@@ -3,8 +3,8 @@ package com.cxy.security.customdbauth.config;
 
 
 //import com.cxy.security.customdbauth.filter.VerificationCodeFilter;
-import com.cxy.security.customdbauth.authProvider.MyDaoAuthenticationProvider;
 import com.cxy.security.customdbauth.authProvider.customAuthenticationDetailsSource.MyWebAuthenticationDetailsSource;
+import com.cxy.security.customdbauth.service.UserDetailService.CustomUserDteailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Configuration;
@@ -16,6 +16,7 @@ import org.springframework.security.web.authentication.AuthenticationFailureHand
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
+import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 
 
 import javax.servlet.ServletException;
@@ -32,6 +33,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private DataSource dataSource;
 
+
+
     @Autowired
     @Qualifier("authSuccessHandler")
     private AuthenticationSuccessHandler authSuccessHandler;
@@ -43,6 +46,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private MyWebAuthenticationDetailsSource myWebAuthenticationDetailsSource;
+
+    @Autowired
+    private CustomUserDteailService customUserDteailService;
 
 
 
@@ -60,6 +66,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+
+        JdbcTokenRepositoryImpl myJdbcTokenRepository = new JdbcTokenRepositoryImpl();
+        myJdbcTokenRepository.setDataSource(dataSource);
+
         http.authorizeRequests()
                 //配置ANT模式URL匹配器(ANT: ？[匹配任意单个字符]，*[匹配0或任意数量的字符]，**[匹配0或者更多的目录])
                 // 必须角色为ADMIN才可以访问
@@ -74,36 +84,54 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin()
                 //配置自己的登录页
                 // .loginPage("myLogin.html")
+                //验证码实现方式二 start：
+             //   .authenticationDetailsSource(myWebAuthenticationDetailsSource)
+                //验证码实现方式二 end：
+
                 //自定义URL method:POST http://localhost:8080/myLogin?username=user&password=f54ed9e5-880f-4d4d-a3c4-7c39f81da5e7
-                .authenticationDetailsSource(myWebAuthenticationDetailsSource)
                 .loginProcessingUrl("/myLogin")
                 .successHandler(authSuccessHandler)
                 .failureHandler(authFailureHandler)
                 //登录页不设限
                 .permitAll()
                 .and()
-                .csrf().disable();
-        //在密码验证过程前添加自定义验证码拦截器
+                .csrf().disable()
+        //验证码实现方式一start：在密码验证过程前添加自定义验证码拦截器
 //        http.addFilterBefore(new VerificationCodeFilter(), UsernamePasswordAuthenticationFilter.class);
+        //验证码实现方式一end
 
-             //配置注销(LogoutFilter)
-                http.logout()
-                     //   .logoutUrl("/xxx")//注销成功后的重定向路由
-                         .logoutSuccessHandler(new LogoutSuccessHandler() {
-                             @Override
-                             public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+        //自动登录实现方式一start：散列算法加密 requestParam:remember-me=on ,详情参见 AbstractRememberMeServices ,TokenBasedRememberMeServices
+//             .rememberMe().userDetailsService(customUserDteailService)
+//             .key("assignKey")//可以指定key,避免每次重启服务后，之前的所有自动登录cookie失效，以及多实例部署，不同实例间的统一key
+        //自动登录实现方式一end
 
-                             }
-                         })
-                        .invalidateHttpSession(true)//让该request的session失效
-                        .deleteCookies()//删除指定的cookie
-                        //可以再定义些额外逻辑
-                        .addLogoutHandler(new LogoutHandler() {
-                            @Override
-                            public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
+                //自动登录实现方式二 start：持久化令牌 详情参见 PersistentTokenBasedRememberMeServices ,PersistentRememberMeToken,JdbcTokenRepositoryImpl
+                .rememberMe().userDetailsService(customUserDteailService)
+                .tokenRepository(myJdbcTokenRepository);
+        //自动登录实现方式一end
 
-                            }
-                        });
+//  配置注销(LogoutFilter) start
+//                http.logout()
+//                     //   .logoutUrl("/xxx")//注销成功后的重定向路由
+//                        //注销成功的处理方式，比重定向更加灵活
+//                         .logoutSuccessHandler(new LogoutSuccessHandler() {
+//                             @Override
+//                             public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+//
+//                             }
+//                         })
+//                        .invalidateHttpSession(true)//让该request的HttpSession失效
+//                        .deleteCookies("cookie1")//删除指定的cookie
+//                        //可以再定义些额外逻辑
+//                        .addLogoutHandler(new LogoutHandler() {
+//                            @Override
+//                            public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
+//
+//                            }
+//                        })
+        //  配置注销(LogoutFilter) end
+
+
     }
 
 

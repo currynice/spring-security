@@ -20,7 +20,7 @@ import org.springframework.stereotype.Component;
  * UsernamePasswordAuthenticationFilter(line 137) setDetails设置用户详细信息方法，其使用的AuthenticationDetailsSource接口，在该类中的默认实现是一个标准的Web认证
  * 源WebAuthenticationDetailsSource，携带的是用户的sessionId和IP地址，我们可以学习，携带别的信息
  */
-@Component
+//@Component
 public class MyDaoAuthenticationProvider extends DaoAuthenticationProvider {
 
     public MyDaoAuthenticationProvider(@Qualifier("customUserDteailService") UserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
