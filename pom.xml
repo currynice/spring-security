@@ -13,7 +13,6 @@
      <module>form-auth</module>
      <module>default-db-auth</module>
      <module>custom-db-auth</module>
-      <module>session-manage</module>
     </modules>
 
     <properties>

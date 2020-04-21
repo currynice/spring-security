@@ -5,6 +5,7 @@ import cn.hutool.core.util.StrUtil;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
@@ -98,5 +99,24 @@ public class UserDTO implements UserDetails {
         return enabled;
     }
 
-    //todo 重写equals() 和hashcode()方法  参考 org.springframework.security.core.userdetails.User
+
+    /**
+     * 重写equals() 和hashcode()方法  参考 org.springframework.security.core.userdetails.User
+     *
+     */
+    @Override
+    public boolean equals(Object rhs) {
+        if (rhs instanceof UserDTO) {
+            return username.equals(((UserDTO) rhs).username);
+        }
+        return false;
+    }
+
+    /**
+     *
+     */
+    @Override
+    public int hashCode() {
+        return username.hashCode();
+    }
 }
