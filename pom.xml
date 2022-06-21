@@ -22,7 +22,7 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <!--升级指导工具 https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-2.0-Migration-Guide -->
-        <mysql.connection.version>8.0.19</mysql.connection.version>
+        <mysql.connection.version>8.0.28</mysql.connection.version>
         <spring.boot.version>2.1.6.RELEASE</spring.boot.version>
         <hutool.version>4.5.11</hutool.version>
     </properties>
